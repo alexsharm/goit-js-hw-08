@@ -92,14 +92,27 @@ gallery.addEventListener('click', handleClick)
 
 function handleClick(event) {
     event.preventDefault()
+    console.log(event.target)
+    if (event.target.nodeName !== 'IMG') {
+        return
+    }
     const link = event.target
-    createModal(link.dataset.source)
+    createModal(link.dataset.source, link.getAttribute('alt'))
 }
 
-function createModal(source) {
-    const instance = basicLightbox.create(`
-    <img src="${source}" width="100%" height="100%">
-`)
+function createModal(source, alternative) {
+    const instance = basicLightbox.create(
+        `<img src="${source}" alt="${alternative}" width="100%" height="100%">`,
+        {
+            onClose: () => {
+                document.removeEventListener('keydown', (event) => {
+                    if (event.key === 'Escape') {
+                        instance.close()
+                    }
+                })
+            },
+        }
+    )
     instance.show()
 
     document.addEventListener('keydown', (event) => {
@@ -107,4 +120,10 @@ function createModal(source) {
             instance.close()
         }
     })
+}
+
+function handleKeyDown(event) {
+    if (event.key === 'Escape') {
+        instance.close()
+    }
 }
