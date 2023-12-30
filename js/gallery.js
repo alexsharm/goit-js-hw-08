@@ -77,6 +77,10 @@ const markup = images
       data-source="${image.original}"
       alt="${image.description}"
     />
+    <img
+      style='display: none'
+      src="${image.original}"
+    />
   </a>
 </li>`
     )
