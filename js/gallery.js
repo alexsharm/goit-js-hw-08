@@ -104,26 +104,19 @@ function createModal(source, alternative) {
     const instance = basicLightbox.create(
         `<img src="${source}" alt="${alternative}" width="100%" height="100%">`,
         {
+            onShow: () => {
+                document.addEventListener('keydown', onEscapeClick)
+            },
             onClose: () => {
-                document.removeEventListener('keydown', (event) => {
-                    if (event.key === 'Escape') {
-                        instance.close()
-                    }
-                })
+                document.removeEventListener('keydown', onEscapeClick)
             },
         }
     )
     instance.show()
 
-    document.addEventListener('keydown', (event) => {
+    function onEscapeClick(event) {
         if (event.key === 'Escape') {
             instance.close()
         }
-    })
-}
-
-function handleKeyDown(event) {
-    if (event.key === 'Escape') {
-        instance.close()
     }
 }
